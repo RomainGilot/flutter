@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tintin/models/album.dart';
+import 'package:tintin/models/gps.dart';
+import 'package:tintin/screens/albums_master.dart';
 import 'providers/reading_list_provider.dart';
 import 'providers/theme_provider.dart';
-import 'screens/albums_master.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(AlbumAdapter());
+  Hive.registerAdapter(GpsAdapter());
+  await Hive.openBox('readingList');
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ReadingListProvider(),
-      child: ChangeNotifierProvider(
-        create: (context) => ThemeProvider(),
-        child: const MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ReadingListProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Albums de Tintin',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const AlbumsMaster(title: 'Albums de Tintin'),
       ),
     ),
   );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Tintin',
-      theme: themeProvider.isDarkMode ? ThemeData.dark() : ThemeData.light(),
-      home: const AlbumsMaster(title: 'Albums'),
-    );
-  }
 }

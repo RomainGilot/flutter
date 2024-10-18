@@ -103,7 +103,6 @@ class AlbumDetails extends StatelessWidget {
                         ],
                       ),
                     ),
-
                   ],
                 ),
               ),

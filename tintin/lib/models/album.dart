@@ -1,13 +1,32 @@
+import 'package:hive/hive.dart';
 import 'gps.dart';
 
+part 'album.g.dart';
+
+@HiveType(typeId: 0)
 class Album {
+  @HiveField(0)
   final String title;
+
+  @HiveField(1)
   final int numero;
+
+  @HiveField(2)
   final int year;
+
+  @HiveField(3)
   final int? yearInColor;
+
+  @HiveField(4)
   final String image;
+
+  @HiveField(5)
   final String resume;
+
+  @HiveField(6)
   final Gps gps;
+
+  @HiveField(7)
   final String location;
 
   Album({
@@ -20,12 +39,6 @@ class Album {
     required this.gps,
     required this.location,
   });
-
-  @override
-  String toString() {
-    return 'Album(title: $title, numero: $numero, year: $year, yearInColor: $yearInColor, image: $image, resume: $resume, gps: $gps, location: $location)';
-  }
-
 
   factory Album.fromJson(Map<String, dynamic> json) {
     return Album(
